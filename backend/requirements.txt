@@ -1,0 +1,39 @@
+# Backend — MVP6
+fastapi==0.136.3
+uvicorn[standard]==0.48.0
+alembic==1.18.4
+SQLAlchemy==2.0.50      # usado solo por Alembic (migraciones), no en queries
+psycopg2-binary==2.9.12 # driver sync requerido por Alembic para correr migraciones
+pydantic==2.13.4
+python-dotenv==1.2.2
+python-multipart==0.0.31   # requerido por FastAPI para parsear UploadFile (file uploads)
+python-jose[cryptography]==3.5.0  # JWT: firmar y verificar tokens de admin
+bcrypt==5.0.0              # hashing de contraseñas (usado directamente, sin passlib)
+pydantic[email]==2.13.4    # EmailStr en LoginRequest (requiere email-validator)
+
+# Tests
+pytest==9.0.3
+
+# Reutilizado del script de terminal
+httpx==0.28.1
+pytesseract==0.3.13
+Pillow==13.0.0
+easyocr==1.7.2
+numpy==2.4.6
+
+# MVP9 — seguridad, observabilidad, retries
+secure==2.0.1          # security headers: HSTS, X-Frame-Options, X-Content-Type, Referrer
+slowapi==0.1.9         # rate limiting en /auth/login (wrapper de limits sobre Starlette)
+sentry-sdk==2.61.0     # observabilidad en producción — desactivado si SENTRY_DSN no está
+filetype==1.2.0        # validación MIME por magic bytes (previene MIME spoofing en uploads)
+tenacity==9.1.4        # HTTP retries con backoff exponencial en MpClient
+boto3==1.38.26         # cliente S3-compatible para Cloudflare R2 (object storage)
+
+# MVP11 — Vision LLM (OCR con Gemini)
+google-genai==2.8.0    # SDK oficial Google AI
+pypdfium2==4.30.0      # conversión PDF→imagen para fallback Tesseract (sin apt, PDFium de Chrome)
+
+# Bloque R — Redis (anti-duplicados cross-réplica, SSE Pub/Sub, caché tenant_config)
+redis[asyncio]==5.2.1
+fakeredis==2.28.1      # Redis en memoria para tests — evita depender de un servidor real
+

@@ -1,0 +1,11 @@
+[phases.setup]
+# tesseract-ocr: motor OCR requerido por pytesseract.
+# tesseract-ocr-spa / tesseract-ocr-eng: datos de idioma — sin esto lang="spa+eng" falla o ignora spa.
+# nodejs_22: build del frontend React.
+aptPkgs = ["tesseract-ocr", "tesseract-ocr-spa", "tesseract-ocr-eng"]
+nixPkgs = ["nodejs_22", "python312"]
+
+[phases.build]
+# Compila el frontend React → frontend/dist/, que FastAPI sirve como estáticos.
+# npm ci usa package-lock.json para installs reproducibles (equivalente a dotnet restore con lock).
+cmds = ["cd frontend && npm ci && npm run build"]

@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Tests backend
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: validador
+          POSTGRES_PASSWORD: validador_dev
+          POSTGRES_DB: validador
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # conftest.py lee DATABASE_URL_TEST y lo setea como DATABASE_URL antes
+      # de importar config.py — la DB de producción nunca se toca en CI.
+      DATABASE_URL_TEST: postgresql://validador:validador_dev@localhost:5432/validador_test
+
+      # Valores ficticios para satisfacer _cargar_config() — los tests que
+      # llaman a MP/R2/WhatsApp mockean el HTTP, no llegan a la red real.
+      MP_ACCESS_TOKEN: ci-fake-mp-token
+      CUIT_DESTINATARIO: "20123456789"
+      R2_ACCOUNT_ID: ci-fake-account
+      R2_ACCESS_KEY_ID: ci-fake-key-id
+      R2_SECRET_ACCESS_KEY: ci-fake-secret
+      R2_BUCKET_NAME: ci-fake-bucket
+      WHATSAPP_TOKEN: ci-fake-wa-token
+      WHATSAPP_PHONE_NUMBER_ID: "123456789"
+      WHATSAPP_VERIFY_TOKEN: ci-fake-verify-token
+      WHATSAPP_APP_SECRET: ""
+
+      # Valores de autenticación para CI — distintos a producción a propósito.
+      # Los tests crean su propio admin y generan sus propios JWT con estas claves.
+      TENANT_ID: ci-test-tenant
+      API_KEY: ci-test-api-key-1234567890abcdef12
+      JWT_SECRET_KEY: ci-test-jwt-secret-key-minimo-32-chars!!
+
+      # LLM desactivado: evita llamadas a Gemini y descarga de modelos EasyOCR en CI.
+      GEMINI_API_KEY: ""
+      LLM_HABILITADO: "false"
+
+      # Sentry desactivado: evita enviar errores de test al proyecto real.
+      SENTRY_DSN: ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Tesseract
+        run: sudo apt-get install -y tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng
+
+      - name: Configurar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install -r backend/requirements.txt
+
+      - name: Auditar dependencias (CVEs)
+        run: |
+          pip install pip-audit -q
+          pip-audit -r backend/requirements.txt --ignore-vuln PYSEC-2026-1325 --ignore-vuln PYSEC-2026-4298
+
+      - name: Análisis estático de seguridad (bandit)
+        run: |
+          pip install bandit -q
+          bandit -r backend/ --exclude backend/tests,backend/migrations,backend/scripts,backend/db/queries_validaciones.py -ll
+          # queries_validaciones.py usa f-strings para WHERE/SET dinámico con strings hardcodeados;
+          # el input del usuario siempre va como %s en params — B608 es falso positivo en ese archivo.
+          bandit backend/db/queries_validaciones.py --skip B608 -ll
+
+      - name: Correr tests
+        working-directory: backend
+        run: pytest tests/ -v --tb=short

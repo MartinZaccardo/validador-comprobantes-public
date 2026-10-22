@@ -1,0 +1,18 @@
+.env
+procesados.json
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Alembic no necesita ignorar nada — migrations/ va a git
+
+# Imágenes locales para debug — contienen comprobantes reales del cliente
+public/
+
+# Comprobantes subidos por usuarios — nunca a git
+backend/uploads/
+.claude/settings.local.json
