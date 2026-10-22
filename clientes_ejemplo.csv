@@ -1,11 +1,11 @@
 codigo_cliente,razon_social,direccion,telefonos,cuits
 1001,Panadería La Espiga,"Av. Rivadavia 1234, CABA",+5491122334455,20123456789
 1002,Ferretería El Tornillo,"Corrientes 567, Rosario",+5493416789012;+5493411234567,30987654321
-1003,Distribuidora Norte TaTito,"Mitre 890, Tucumán",+5493814567891,
-1004,Almacén San Martin,"Belgrano 123, Mendoza",+541234475663,27345678901
+1003,Distribuidora del Norte,"Mitre 890, Tucumán",+5493814567891,
+1004,Almacén San Cayetano,"Belgrano 123, Mendoza",+5492614567890,27345678901
 1005,Librería El Saber,,+5493516789012,20456789012
 1006,Metalúrgica del Sur,"Av. San Martín 100, La Plata",+5492214567890,30111222333;20999888777
 1007,Textil Andina,"Paraguay 321, Buenos Aires",+5491133445566;+5491177889900,20333444555;27666777888
 1008,Importadora Central,"Córdoba 456, Rosario",+5493412345678,30222333444
 1009,Construcciones Rápidas,,+5491144556677,20777888999
-1010,Supermercado El Valle Jose Luis,"Salta 789, Neuquén",+5492994567891,30444555666
+1010,Supermercado El Pinar,"Salta 789, Neuquén",+5492994567891,30444555666

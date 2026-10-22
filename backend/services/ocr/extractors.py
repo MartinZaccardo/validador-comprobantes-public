@@ -117,7 +117,7 @@ def detectar_numero_operacion(texto: str) -> str | None:
 
 def detectar_cuit_destinatario(texto: str) -> str | None:
     # Patrón de CUIT que acepta tres formatos de separador:
-    #   · Guión: "20-45744727-3"  (estándar)
+    #   · Guión: "20-12345678-3"  (estándar)
     #   · Punto: "20.45744727.3"  (EasyOCR confunde guión con punto)
     #   · Espacio: "20 457447273" (Tesseract en crop OpenCV: el separador se omite
     #              y los grupos 2do y 3er se fusionan → "45744727"+"3" = "457447273")

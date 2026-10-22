@@ -87,12 +87,12 @@ REGLAS PARA MONTO:
 REGLAS PARA CUIT DEL DESTINATARIO (cuit_destinatario):
 - Extraer del campo o sección que identifique al RECEPTOR: "Para:", "Cuenta destino", "CUIT/CUIL destino", "CUIT DESTINO", "CUIT receptor", "Receptor" (solo el CUIT), o cualquier campo CUIT que corresponda a quien recibe.
 - NUNCA del emisor/origen: "De:", "Cuenta origen", "CUIT/CUIL emisor", "Enviado por".
-- Formato: 11 dígitos sin guiones ni espacios. "20-45744727-3" → "20457447273"
+- Formato: 11 dígitos sin guiones ni espacios. "20-12345678-3" → "20457447273"
 - Si no tiene exactamente 11 dígitos: null
 
 REGLAS PARA CUIT DEL REMITENTE (cuit_remitente):
 - Extraer del campo o sección que identifique al EMISOR: "De:", "Cuenta origen", "CUIT/CUIL emisor", "CUIT ORIGEN", "Enviado por", "Remitente" (solo el CUIT).
-- Formato: 11 dígitos sin guiones ni espacios. "20-45402642-0" → "20454026420"
+- Formato: 11 dígitos sin guiones ni espacios. "20-12345678-3" → "20454026420"
 - Si no tiene exactamente 11 dígitos: null
 
 REGLAS PARA CVU/CBU DESTINATARIO:
@@ -183,7 +183,7 @@ class ComprobanteLLM(BaseModel):
     )
     cuit_destinatario: str | None = Field(
         default=None,
-        description="CUIT de quien RECIBE. 11 dígitos sin guiones. '20-45744727-3' → '20457447273'. Si no tiene 11 dígitos: null.",
+        description="CUIT de quien RECIBE. 11 dígitos sin guiones. '20-12345678-3' → '20457447273'. Si no tiene 11 dígitos: null.",
     )
     cuit_remitente: str | None = Field(
         default=None,

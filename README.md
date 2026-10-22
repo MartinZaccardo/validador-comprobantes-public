@@ -145,7 +145,7 @@ validador-comprobantes/
 
 ```bash
 # 1. Clonar el proyecto
-git clone https://github.com/MartinZaccardo/validador-comprobantes.git
+git clone https://github.com/MartinZaccardo/validador-comprobantes-public.git
 cd validador-comprobantes
 
 # 2. Levantar PostgreSQL (puerto 5433 — evita conflicto con postgres nativo)
